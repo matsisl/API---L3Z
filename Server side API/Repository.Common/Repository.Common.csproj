@@ -71,12 +71,19 @@
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="IVehicleMakeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryProfile.cs" />
     <Compile Include="VehicleMakeRepo.cs" />
     <Compile Include="VehicleModelRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{C91CACA5-9D91-40ED-AB6C-1845007F7F9C}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
