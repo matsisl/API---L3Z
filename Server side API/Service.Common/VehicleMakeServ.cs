@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Service.Common
 {
-    public class Class1
+    public class VehicleMakeServ
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Abrv { get; set; }
     }
 }
