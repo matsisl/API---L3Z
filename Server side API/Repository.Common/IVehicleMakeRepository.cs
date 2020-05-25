@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Repository.Common
 {
-    public class Class1
+    public interface IVehicleMakeRepository : IRepository<VehicleMakeRepo>
     {
+        Task<IEnumerable<VehicleModelRepo>> GetVehicleModels();
     }
 }
