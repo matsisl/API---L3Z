@@ -9,7 +9,7 @@ namespace DAL
     {
         public DbSet<VehicleMake> VehicleMakes { get; set; }
         public DbSet<VehicleModel> VehicleModels { get; set; }
-        public VehicleContext() : base("name=VehicleModel")
+        public VehicleContext() : base("VehicleModel")
         {
         }
     }

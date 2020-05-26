@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Repository;
 using Repository.Common;
 using Service.Common;
 using System;
@@ -11,10 +12,10 @@ namespace Service
 {
     public class VehicleMakeService : IService<VehicleMakeServ>
     {
-        private IUnitOfWork unitOfWork { get; }
+        private UnitOfWork unitOfWork { get; }
         private IMapper mapper { get; }
 
-        public VehicleMakeService(IUnitOfWork unitOfWork, IMapper mapper)
+        public VehicleMakeService(UnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
