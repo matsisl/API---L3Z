@@ -38,5 +38,53 @@ namespace Server_side_API.Controllers
             }
             return makes;
         }
+
+        [Route("api/vehiclemakes/id")]
+        [HttpGet]
+        public async Task<VehicleMake> GetById(int id)
+        {
+            VehicleMakeServ vehicleMake = await vehicleMakeService.GetById(id);
+            return mapper.Map<VehicleMake>(vehicleMake);
+        }
+
+        [Route("api/vehiclemakes")]
+        [HttpDelete]
+        public async Task<bool> Delete(VehicleMake vehicleMake)
+        {
+            VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
+            bool provjera = await vehicleMakeService.Delete(vehicleMakeServ);
+            return provjera;
+        }
+
+        [Route("api/vehiclemakes/")]
+        [HttpPost]
+        public async Task<bool> Add(VehicleMake vehicleMake)
+        {
+            VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
+            bool provjera = await vehicleMakeService.Add(vehicleMakeServ);
+            return provjera;
+        }
+
+        [Route("api/vehiclemakes")]
+        [HttpPut]
+        public async Task<bool> Update(VehicleMake vehicleMake)
+        {
+            VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
+            bool provjera = await vehicleMakeService.Update(vehicleMakeServ);
+            return provjera;
+        }
+
+        [Route("api/vehiclemakes/models")]
+        [HttpGet]
+        public async Task<IEnumerable<VehicleModel>> GetModels(int id)
+        {
+            IEnumerable<VehicleModelServ> vehicleModelServs = await vehicleMakeService.GetModels(id);
+            List<VehicleModel> vehicleModels = new List<VehicleModel>();
+            foreach (VehicleModelServ item in vehicleModelServs)
+            {
+                vehicleModels.Add(mapper.Map<VehicleModel>(item));
+            }
+            return vehicleModels;
+        }
     }
 }

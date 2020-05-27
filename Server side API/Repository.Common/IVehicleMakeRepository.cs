@@ -8,6 +8,6 @@ namespace Repository.Common
 {
     public interface IVehicleMakeRepository : IRepository<VehicleMakeRepo>
     {
-        Task<IEnumerable<VehicleModelRepo>> GetVehicleModels();
+        Task<IEnumerable<VehicleModelRepo>> GetVehicleModels(int id);
     }
 }

@@ -17,8 +17,6 @@ namespace Repository
         public UnitOfWork(VehicleContext vehicleContext,IMapper mapper)
         {
             VehicleContext = vehicleContext;
-
-            //pozvati maper iz DI
             this.mapper = mapper; 
             VehicleMakeRepository = new VehicleMakeRepository(vehicleContext, mapper);
         }

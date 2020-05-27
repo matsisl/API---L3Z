@@ -21,14 +21,32 @@ namespace Service
             this.mapper = mapper;
         }
 
-        public Task<bool> Add(VehicleMakeServ entity)
+        public async Task<bool> Add(VehicleMakeServ entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if(entity != null)
+            {
+                VehicleMakeRepo vehicleMake = mapper.Map<VehicleMakeRepo>(entity);
+                provjera = await unitOfWork.VehicleMakeRepository.Add(vehicleMake);
+                if (provjera)
+                {
+                    unitOfWork.Complete();
+                }
+            }
+            return provjera;
         }
 
-        public Task<bool> Delete(VehicleMakeServ entity)
+        public async Task<bool> Delete(VehicleMakeServ entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if(entity != null)
+            {
+                VehicleMakeRepo vehicleMakeRepo = mapper.Map<VehicleMakeRepo>(entity);
+                provjera = await unitOfWork.VehicleMakeRepository.Delete(vehicleMakeRepo);
+                if(provjera)
+                    unitOfWork.Complete();
+            }
+            return provjera;
         }
 
         public async Task<IEnumerable<VehicleMakeServ>> Get()
@@ -42,9 +60,33 @@ namespace Service
             return vehicleMakesServ;
         }
 
-        public Task<bool> Update(VehicleMakeServ entity)
+        public async Task<bool> Update(VehicleMakeServ entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if (entity != null){
+                VehicleMakeRepo vehicleMakeRepo = mapper.Map<VehicleMakeRepo>(entity);
+                provjera = await unitOfWork.VehicleMakeRepository.Update(vehicleMakeRepo);
+                if (provjera)
+                    unitOfWork.Complete();
+            }
+            return provjera;
+        }
+
+        public async Task<VehicleMakeServ> GetById(int id)
+        {
+            VehicleMakeRepo vehicleMakeRepo = await unitOfWork.VehicleMakeRepository.GetById(id);
+            return mapper.Map<VehicleMakeServ>(vehicleMakeRepo);
+        }
+
+        public async Task<IEnumerable<VehicleModelServ>> GetModels(int id)
+        {
+            IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleMakeRepository.GetVehicleModels(id);
+            List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
+            foreach (VehicleModelRepo item in vehicleModelRepos)
+            {
+                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
+            }
+            return vehicleModelServs;
         }
     }
 }

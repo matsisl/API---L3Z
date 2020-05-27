@@ -70,6 +70,7 @@
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VehicleMakeServ.cs" />
+    <Compile Include="VehicleModelServ.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

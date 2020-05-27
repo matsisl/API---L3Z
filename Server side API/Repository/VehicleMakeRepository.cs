@@ -5,7 +5,9 @@ using Repository.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,14 +24,35 @@ namespace Repository
             this.mapper = mapper;
         }
 
-        public Task<bool> Add(VehicleMakeRepo entity)
+        public async Task<bool> Add(VehicleMakeRepo entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if(entity != null)
+            {
+                VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
+                VehicleMake make = vehiclesSet.Add(vehicleMake);
+                if (make != null)
+                {
+                    provjera = true;
+                }
+            }
+            return provjera;
         }
 
-        public Task<bool> Delete(VehicleMakeRepo entity)
+        public async Task<bool> Delete(VehicleMakeRepo entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if (entity != null)
+            {
+                VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
+                vehiclesSet.Attach(vehicleMake);
+                VehicleMake make = vehiclesSet.Remove(vehicleMake);
+                if (make != null)
+                {
+                    provjera = true;
+                }
+            }
+            return provjera;
         }
 
         public Task<bool> DeleteById(int id)
@@ -48,19 +71,39 @@ namespace Repository
             return vehicleMakesRepo;
         }
 
-        public Task<VehicleMakeRepo> GetById(int id)
+        public async Task<VehicleMakeRepo> GetById(int id)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMake = await vehiclesSet.FindAsync(id);
+            return mapper.Map<VehicleMakeRepo>(vehicleMake);
         }
 
-        public Task<IEnumerable<VehicleModelRepo>> GetVehicleModels()
+        public async Task<IEnumerable<VehicleModelRepo>> GetVehicleModels(int id)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMakes = await vehiclesSet.FindAsync(id);
+            List<VehicleModelRepo> vehicleModelsRepo = new List<VehicleModelRepo>();
+            foreach (VehicleModel item in vehicleMakes.VehicleModels)
+            {
+                vehicleModelsRepo.Add(mapper.Map<VehicleModelRepo>(item));
+            }
+            return vehicleModelsRepo;
         }
 
-        public Task<bool> Update(VehicleMakeRepo entity)
+        public async Task<bool> Update(VehicleMakeRepo entity)
         {
-            throw new NotImplementedException();
+            bool provjera = false;
+            if(entity != null)
+            {
+                VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
+                var updatedVehicleMake = vehiclesSet.Find(entity.Id);
+                if (updatedVehicleMake != null)
+                {
+                    updatedVehicleMake.Name = vehicleMake.Name;
+                    updatedVehicleMake.Abrv = vehicleMake.Abrv;
+                    provjera = true;
+                }                
+                
+            }
+            return provjera;
         }
     }
 }

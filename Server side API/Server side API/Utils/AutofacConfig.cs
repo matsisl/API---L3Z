@@ -37,6 +37,7 @@ namespace Server_side_API.Utils
             {
                 cfg.AddProfile(new RepositoryProfile());
                 cfg.AddProfile(new ServiceProfile());
+                cfg.AddProfile(new AutomapProfile());
             })).AsSelf().SingleInstance();
             builder.Register(c =>
             {

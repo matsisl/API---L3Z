@@ -5,16 +5,11 @@ using System.Web;
 
 namespace Server_side_API.Models
 {
-    public class VehicleMake
+    public class VehicleModel
     {
         public int Id { get; set; }
-        public string name { get; set; }
+        public string Name { get; set; }
         public string Abrv { get; set; }
-
-        public VehicleMake(string name, string abrv)
-        {
-            this.name = name;
-            Abrv = abrv;
-        }
+        public int MakeId { get; set; }
     }
 }
