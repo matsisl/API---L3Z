@@ -14,6 +14,7 @@ namespace Service
         public ServiceProfile()
         {
             CreateMap<VehicleMakeServ, VehicleMakeRepo>().ReverseMap();
+            CreateMap<VehicleModelServ, VehicleModelRepo>().ReverseMap();
         }
     }
 }

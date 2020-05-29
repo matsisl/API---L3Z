@@ -9,6 +9,7 @@ namespace Repository.Common
     public interface IUnitOfWork:IDisposable
     {
         IVehicleMakeRepository VehicleMakeRepository { get; }
+        IVehicleModelRepository VehicleModelRepository { get; }
         int Complete();
         void Dispose();
     }

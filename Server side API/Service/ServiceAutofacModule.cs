@@ -13,6 +13,7 @@ namespace Service
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<VehicleMakeService>();
+            builder.RegisterType<VehicleModelService>();
         }
     }
 }

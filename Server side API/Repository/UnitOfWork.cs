@@ -14,14 +14,17 @@ namespace Repository
         private VehicleContext VehicleContext;
         private IMapper mapper;
 
-        public UnitOfWork(VehicleContext vehicleContext,IMapper mapper)
+        public UnitOfWork(VehicleContext vehicleContext, IMapper mapper)
         {
             VehicleContext = vehicleContext;
-            this.mapper = mapper; 
-            VehicleMakeRepository = new VehicleMakeRepository(vehicleContext, mapper);
+            this.mapper = mapper;
+            VehicleMakeRepository = new VehicleMakeRepository(VehicleContext,mapper);
+            VehicleModelRepository = new VehicleModelRepository(VehicleContext,mapper);
         }
 
         public IVehicleMakeRepository VehicleMakeRepository { get; }
+
+        public IVehicleModelRepository VehicleModelRepository { get; }
 
         public int Complete()
         {

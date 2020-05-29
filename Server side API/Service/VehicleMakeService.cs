@@ -30,7 +30,7 @@ namespace Service
                 provjera = await unitOfWork.VehicleMakeRepository.Add(vehicleMake);
                 if (provjera)
                 {
-                    unitOfWork.Complete();
+                    int i = unitOfWork.Complete();
                 }
             }
             return provjera;

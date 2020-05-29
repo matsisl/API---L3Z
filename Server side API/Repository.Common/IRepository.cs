@@ -12,7 +12,6 @@ namespace Repository.Common
         Task<IEnumerable<TEntity>> GetAll();
         Task<bool> Add(TEntity entity);
         Task<bool> Delete(TEntity entity);
-        Task<bool> DeleteById(int id);
         Task<bool> Update(TEntity entity);
     }
 }

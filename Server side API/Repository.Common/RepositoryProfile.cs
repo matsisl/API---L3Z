@@ -13,6 +13,7 @@ namespace Repository.Common
         public RepositoryProfile()
         {
             CreateMap<VehicleMakeRepo, VehicleMake>().ReverseMap();
+            CreateMap<VehicleModelRepo, VehicleModel>().ReverseMap();
         }
     }
 }

@@ -45,19 +45,14 @@ namespace Repository
             if (entity != null)
             {
                 VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
-                vehiclesSet.Attach(vehicleMake);
-                VehicleMake make = vehiclesSet.Remove(vehicleMake);
+                VehicleMake make = await vehiclesSet.FindAsync(vehicleMake.Id);                
                 if (make != null)
                 {
+                    vehiclesSet.Remove(make);
                     provjera = true;
                 }
             }
             return provjera;
-        }
-
-        public Task<bool> DeleteById(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<VehicleMakeRepo>> GetAll()
@@ -94,7 +89,7 @@ namespace Repository
             if(entity != null)
             {
                 VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
-                var updatedVehicleMake = vehiclesSet.Find(entity.Id);
+                var updatedVehicleMake = await vehiclesSet.FindAsync(entity.Id);
                 if (updatedVehicleMake != null)
                 {
                     updatedVehicleMake.Name = vehicleMake.Name;

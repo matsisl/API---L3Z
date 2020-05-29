@@ -15,6 +15,7 @@ namespace Server_side_API.Utils
         public AutomapProfile()
         {
             CreateMap<VehicleMake, VehicleMakeServ>().ReverseMap();
+            CreateMap<VehicleModel, VehicleModelServ>().ReverseMap();
         }
     }
 }
