@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using Autofac;
+using AutoMapper;
 using Server_side_API.Models;
+using Server_side_API.Utils;
 using Service;
 using Service.Common;
 using System;
@@ -19,10 +21,11 @@ namespace Server_side_API.Controllers
         private IMapper mapper;
         private const string baseRoute = "api/vehiclemodels";
 
-        public VehicleModelController(VehicleModelService vehicleModelService, IMapper mapper)
+
+        public VehicleModelController()
         {
-            VehicleModelService = vehicleModelService;
-            this.mapper = mapper;
+            VehicleModelService = AutofacConfig.Container.Resolve<VehicleModelService>();
+            mapper = AutofacConfig.Container.Resolve<IMapper>();
         }
 
         [Route(baseRoute)]
