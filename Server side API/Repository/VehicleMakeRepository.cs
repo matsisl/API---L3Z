@@ -17,11 +17,13 @@ namespace Repository
     {
         private DbSet<VehicleMake> vehiclesSet { get; }
         private IMapper mapper;
+        private VehicleContext VehicleContext;
 
         public VehicleMakeRepository(VehicleContext vehicleContext,IMapper mapper)
         {
             this.vehiclesSet = vehicleContext.VehicleMakes;
             this.mapper = mapper;
+            VehicleContext = vehicleContext;
         }
 
         public async Task<bool> Add(VehicleMakeRepo entity)
@@ -57,7 +59,7 @@ namespace Repository
 
         public async Task<IEnumerable<VehicleMakeRepo>> GetAll()
         {
-            List<VehicleMake> vehicleMakes = await vehiclesSet.ToListAsync<VehicleMake>();
+            List<VehicleMake> vehicleMakes = await vehiclesSet.ToListAsync();
             List<VehicleMakeRepo> vehicleMakesRepo = new List<VehicleMakeRepo>();
             foreach (VehicleMake item in vehicleMakes)
             {

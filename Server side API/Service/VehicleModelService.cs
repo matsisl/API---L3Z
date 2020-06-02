@@ -27,11 +27,7 @@ namespace Service
             if (entity != null)
             {
                 VehicleModelRepo vehicleModel = mapper.Map<VehicleModelRepo>(entity);
-                VehicleMakeRepo vehicleMake = await unitOfWork.VehicleMakeRepository.GetById(vehicleModel.MakeId);
-                if(vehicleMake != null)
-                {
-                    provjera = await unitOfWork.VehicleModelRepository.Add(vehicleModel);
-                }
+                provjera = await unitOfWork.VehicleModelRepository.Add(vehicleModel);
                 if (provjera)
                 {
                     unitOfWork.Complete();
@@ -82,7 +78,6 @@ namespace Service
             }
             return provjera;
         }
-
         public async Task<VehicleMakeServ> GetMake(int id)
         {
             VehicleMakeRepo vehicleMakeRepo = await unitOfWork.VehicleModelRepository.GetVehicleMake(id);

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,7 +58,7 @@ namespace Repository
 
         public async Task<IEnumerable<VehicleModelRepo>> GetAll()
         {
-            List<VehicleModel> vehicleModels = await vehicleModelSet.ToListAsync<VehicleModel>();
+            List<VehicleModel> vehicleModels = await vehicleModelSet.ToListAsync();
             List<VehicleModelRepo> vehicleModelsRepo = new List<VehicleModelRepo>();
             foreach (VehicleModel item in vehicleModels)
             {
@@ -77,12 +78,8 @@ namespace Repository
             VehicleModel vehicleModel = await vehicleModelSet.FindAsync(id);
             if(vehicleModel != null)
             {
-                using(var db = Context)
-                {
-                    VehicleMake m = await db.VehicleMakes.FindAsync(vehicleModel.MakeId);
-                    return mapper.Map<VehicleMakeRepo>(m);
-                }                
-                
+                vehicleModelSet.Attach(vehicleModel);
+                return mapper.Map<VehicleMakeRepo>(vehicleModel.VehicleMake);
             }
             else
             {
@@ -102,7 +99,6 @@ namespace Repository
                 {
                     updatedVehicleModel.Name = vehicleModel.Name;
                     updatedVehicleModel.Abrv = vehicleModel.Abrv;
-                    updatedVehicleModel.MakeId = vehicleModel.MakeId;
                     provjera = true;
                 }
 
