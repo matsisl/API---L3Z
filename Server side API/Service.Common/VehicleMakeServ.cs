@@ -11,5 +11,6 @@ namespace Service.Common
         public int Id { get; set; }
         public string Name { get; set; }
         public string Abrv { get; set; }
+        public List<VehicleModelServ> VehicleModels { get; set; }
     }
 }
