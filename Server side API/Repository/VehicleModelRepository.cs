@@ -31,6 +31,7 @@ namespace Repository
             if (entity != null)
             {
                 VehicleModel vehicleModel = mapper.Map<VehicleModel>(entity);
+                vehicleModel.MakeId = vehicleModel.VehicleMake.Id;
                 VehicleModel model = vehicleModelSet.Add(vehicleModel);
                 if (model != null)
                 {
