@@ -24,7 +24,7 @@ namespace Service
         public async Task<bool> Add(VehicleModelServ entity)
         {
             bool provjera = false;
-            if (entity != null)
+            if (entity != null || entity.MakeId!=0)
             {
                 VehicleModelRepo vehicleModel = mapper.Map<VehicleModelRepo>(entity);
                 provjera = await unitOfWork.VehicleModelRepository.Add(vehicleModel);

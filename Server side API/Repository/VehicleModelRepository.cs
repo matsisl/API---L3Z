@@ -31,11 +31,13 @@ namespace Repository
             if (entity != null)
             {
                 VehicleModel vehicleModel = mapper.Map<VehicleModel>(entity);
-                vehicleModel.MakeId = vehicleModel.VehicleMake.Id;
-                VehicleModel model = vehicleModelSet.Add(vehicleModel);
-                if (model != null)
+                if (!IsNotExist(vehicleModel) && IsMakeExist(vehicleModel.MakeId))
                 {
-                    provjera = true;
+                    VehicleModel model = vehicleModelSet.Add(vehicleModel);
+                    if (model != null)
+                    {
+                        provjera = true;
+                    }
                 }
             }
             return provjera;
@@ -91,20 +93,100 @@ namespace Repository
 
         public async Task<bool> Update(VehicleModelRepo entity)
         {
-            bool provjera = false;
+            bool provjera = true;
             if (entity != null)
             {
                 VehicleModel vehicleModel = mapper.Map<VehicleModel>(entity);
-                var updatedVehicleModel = await vehicleModelSet.FindAsync(entity.Id);
-                if (updatedVehicleModel != null)
+                var updatedVehicleModel = await vehicleModelSet.FindAsync(vehicleModel.Id);
+                if (updatedVehicleModel != null )
                 {
-                    updatedVehicleModel.Name = vehicleModel.Name;
-                    updatedVehicleModel.Abrv = vehicleModel.Abrv;
-                    provjera = true;
+                    if (!IsNameNotExist(updatedVehicleModel.Id, vehicleModel.Name))
+                    {
+                        updatedVehicleModel.Name = vehicleModel.Name;
+                    }
+                    else
+                    {
+                        provjera = false;
+                    }
+                    if (!IsAbrvNotExist(updatedVehicleModel.Id, vehicleModel.Abrv))
+                    {
+                        updatedVehicleModel.Abrv = vehicleModel.Abrv;
+                    }
+                    else
+                    {
+                        provjera = false;
+                    }
+                    if (IsMakeExist(vehicleModel.MakeId))
+                    { 
+                        if(vehicleModel.MakeId!=0)
+                            updatedVehicleModel.MakeId = vehicleModel.MakeId;
+                    }
+                    else
+                    {
+                        provjera = false;
+                    }
                 }
-
+            }
+            else
+            {
+                provjera = false;
             }
             return provjera;
+        }
+
+        private bool IsNotExist(VehicleModel vehicleModel)
+        {
+            if (!String.IsNullOrWhiteSpace(vehicleModel.Name) && !String.IsNullOrWhiteSpace(vehicleModel.Abrv))
+            {
+                string name = vehicleModel.Name.ToLower();
+                string abrv = vehicleModel.Abrv.ToLower();
+                List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Name.ToLower().Equals(name) || x.Abrv.ToLower().Equals(abrv)).ToList();
+                if (vehicleModels.Count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+                return true;
+        }
+        private bool IsNameNotExist(int id, string newName)
+        {
+            if (!String.IsNullOrWhiteSpace(newName))
+            {
+                newName = newName.ToLower();
+                List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Name.ToLower().Equals(newName) && x.Id!=id ).ToList();
+                if (vehicleModels.Count == 0)
+                    return false;
+                else
+                    return true;
+            }
+            return true;
+        }
+
+        private bool IsAbrvNotExist(int id, string abrv)
+        {
+            if (!String.IsNullOrWhiteSpace(abrv))
+            {
+                abrv = abrv.ToLower();
+                List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Abrv.ToLower().Equals(abrv) && x.Id!=id).ToList();
+                if (vehicleModels.Count == 0)
+                    return false;
+                else
+                    return true;
+            }
+            return true;
+        }
+        private bool IsMakeExist(int id)
+        {
+            VehicleMake vehicleMake = Context.VehicleMakes.Find(id);
+            if (vehicleMake == null)
+                return false;
+            else
+                return true;
         }
     }
 }

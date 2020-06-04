@@ -32,10 +32,13 @@ namespace Repository
             if(entity != null)
             {
                 VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
-                VehicleMake make = vehiclesSet.Add(vehicleMake);
-                if (make != null)
+                if (IsNotExist(vehicleMake))
                 {
-                    provjera = true;
+                    VehicleMake make = vehiclesSet.Add(vehicleMake);
+                    if (make != null)
+                    {
+                        provjera = true;
+                    }
                 }
             }
             return provjera;
@@ -94,13 +97,65 @@ namespace Repository
                 var updatedVehicleMake = await vehiclesSet.FindAsync(entity.Id);
                 if (updatedVehicleMake != null)
                 {
-                    updatedVehicleMake.Name = vehicleMake.Name;
-                    updatedVehicleMake.Abrv = vehicleMake.Abrv;
-                    provjera = true;
+                    if (IsNameNotExist(updatedVehicleMake.Id, vehicleMake.Name))
+                    {
+                        updatedVehicleMake.Name = vehicleMake.Name;
+                        provjera = true;
+                    }
+                    if (IsAbrvNotExist(updatedVehicleMake.Id, vehicleMake.Abrv))
+                    {
+                        updatedVehicleMake.Abrv = vehicleMake.Abrv;
+                        provjera = true;
+                    }
                 }                
                 
             }
             return provjera;
+        }
+
+        private bool IsNotExist(VehicleMake vehicleMake)
+        {
+            if (!String.IsNullOrWhiteSpace(vehicleMake.Name) && !String.IsNullOrWhiteSpace(vehicleMake.Abrv))
+            {
+                string name = vehicleMake.Name.ToLower();
+                string abrv = vehicleMake.Abrv.ToLower();
+                List<VehicleMake> vehicleMakes = vehiclesSet.Where(x => x.Abrv.ToLower().Equals(abrv) || x.Name.ToLower().Equals(name)).ToList();
+                if (vehicleMakes.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool IsNameNotExist(int id, string name)
+        {
+            if (!String.IsNullOrWhiteSpace(name))
+            {
+                name = name.ToLower();
+                List<VehicleMake> vehicleMakes = vehiclesSet.Where(x => x.Name.ToLower().Equals(name) && x.Id==id).ToList();
+                if (vehicleMakes.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
+
+        private bool IsAbrvNotExist(int id, string abrv)
+        {
+            if (!String.IsNullOrWhiteSpace(abrv))
+            {
+                abrv = abrv.ToLower();
+                List<VehicleMake> vehicleMakes = vehiclesSet.Where(x => x.Abrv.ToLower().Equals(abrv) && x.Id==id).ToList();
+                if (vehicleMakes.Count == 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
         }
     }
 }
