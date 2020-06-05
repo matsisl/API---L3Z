@@ -54,10 +54,7 @@ namespace Service
         {
             IEnumerable<VehicleMakeRepo> vehicleMakesRepo = await unitOfWork.VehicleMakeRepository.GetAll();
             List<VehicleMakeServ> vehicleMakesServ = new List<VehicleMakeServ>();
-            foreach (VehicleMakeRepo item in vehicleMakesRepo)
-            {
-                vehicleMakesServ.Add(mapper.Map<VehicleMakeServ>(item));
-            }
+            vehicleMakesServ = mapper.Map<IEnumerable<VehicleMakeRepo>, List<VehicleMakeServ>>(vehicleMakesRepo);
             return vehicleMakesServ;
         }
 
@@ -83,10 +80,7 @@ namespace Service
         {
             IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleMakeRepository.GetVehicleModels(id);
             List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
-            foreach (VehicleModelRepo item in vehicleModelRepos)
-            {
-                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
-            }
+            vehicleModelServs = mapper.Map<IEnumerable<VehicleModelRepo>, List<VehicleModelServ>>(vehicleModelRepos);
             return vehicleModelServs;
         }
 
@@ -94,10 +88,7 @@ namespace Service
         {
             List<VehicleMakeServ> vehicleMakeServs = new List<VehicleMakeServ>();
             IEnumerable<VehicleMakeRepo> vehicleMakeRepos = await unitOfWork.VehicleMakeRepository.Sort(typeOfSorting);
-            foreach (VehicleMakeRepo item in vehicleMakeRepos)
-            {
-                vehicleMakeServs.Add(mapper.Map<VehicleMakeServ>(item));
-            }
+            vehicleMakeServs = mapper.Map<IEnumerable<VehicleMakeRepo>, List<VehicleMakeServ>>(vehicleMakeRepos);
             return vehicleMakeServs;
         }
 
@@ -105,10 +96,7 @@ namespace Service
         {
             List<VehicleMakeServ> vehicleMakeServs = new List<VehicleMakeServ>();
             IEnumerable<VehicleMakeRepo> vehicleMakeRepos = await unitOfWork.VehicleMakeRepository.Filter(filter);
-            foreach (VehicleMakeRepo item in vehicleMakeRepos)
-            {
-                vehicleMakeServs.Add(mapper.Map<VehicleMakeServ>(item));
-            }
+            vehicleMakeServs = mapper.Map<IEnumerable<VehicleMakeRepo>, List<VehicleMakeServ>>(vehicleMakeRepos);
             return vehicleMakeServs;
         }
 
@@ -116,10 +104,7 @@ namespace Service
         {
             List<VehicleMakeServ> vehicleMakeServs = new List<VehicleMakeServ>();
             IEnumerable<VehicleMakeRepo> vehicleMakeRepos = await unitOfWork.VehicleMakeRepository.Paging(pageSize, pageIndex);
-            foreach (VehicleMakeRepo item in vehicleMakeRepos)
-            {
-                vehicleMakeServs.Add(mapper.Map<VehicleMakeServ>(item));
-            }
+            vehicleMakeServs = mapper.Map<IEnumerable<VehicleMakeRepo>, List<VehicleMakeServ>>(vehicleMakeRepos);
             return vehicleMakeServs;
         }
     }

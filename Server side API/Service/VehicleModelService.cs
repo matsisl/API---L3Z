@@ -54,10 +54,7 @@ namespace Service
         {
             IEnumerable<VehicleModelRepo> vehicleModelRepo = await unitOfWork.VehicleModelRepository.GetAll();
             List<VehicleModelServ> vehicleModelServ = new List<VehicleModelServ>();
-            foreach (VehicleModelRepo item in vehicleModelRepo)
-            {
-                vehicleModelServ.Add(mapper.Map<VehicleModelServ>(item));
-            }
+            vehicleModelServ = mapper.Map<IEnumerable<VehicleModelRepo>, List<VehicleModelServ>>(vehicleModelRepo);
             return vehicleModelServ;
         }
 
@@ -89,10 +86,7 @@ namespace Service
         {
             List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
             IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Sort(typeOfSorting);
-            foreach (VehicleModelRepo item in vehicleModelRepos)
-            {
-                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
-            }
+            vehicleModelServs = mapper.Map<IEnumerable<VehicleModelRepo>, List<VehicleModelServ>>(vehicleModelRepos);
             return vehicleModelServs;
         }
 
@@ -100,10 +94,7 @@ namespace Service
         {
             List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
             IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Filter(filter);
-            foreach (VehicleModelRepo item in vehicleModelRepos)
-            {
-                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
-            }
+            vehicleModelServs = mapper.Map<IEnumerable<VehicleModelRepo>, List<VehicleModelServ>>(vehicleModelRepos);
             return vehicleModelServs;
         }
 
@@ -111,10 +102,7 @@ namespace Service
         {
             List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
             IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Paging(pageSize,pageIndex);
-            foreach (VehicleModelRepo item in vehicleModelRepos)
-            {
-                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
-            }
+            vehicleModelServs = mapper.Map<IEnumerable<VehicleModelRepo>, List<VehicleModelServ>>(vehicleModelRepos);
             return vehicleModelServs;
         }
     }

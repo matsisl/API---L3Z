@@ -33,10 +33,7 @@ namespace Server_side_API.Controllers
         {
             IEnumerable<VehicleMakeServ> vehicleMakes = await VehicleMakeService.Get();
             List<VehicleMake> makes = new List<VehicleMake>();
-            foreach (VehicleMakeServ item in vehicleMakes)
-            {
-                makes.Add(mapper.Map<VehicleMake>(item));
-            }
+            makes = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakes);
             return Ok(makes);
         }
 
@@ -93,10 +90,7 @@ namespace Server_side_API.Controllers
         {
             IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleMakeService.GetModels(id);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
-            foreach (VehicleModelServ item in vehicleModelServs)
-            {
-                vehicleModels.Add(mapper.Map<VehicleModel>(item));
-            }
+            vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
             return Ok(vehicleModels);
         }
 

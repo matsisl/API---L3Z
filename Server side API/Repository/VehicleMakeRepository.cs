@@ -64,10 +64,7 @@ namespace Repository
         {
             List<VehicleMake> vehicleMakes = await vehiclesSet.ToListAsync();
             List<VehicleMakeRepo> vehicleMakesRepo = new List<VehicleMakeRepo>();
-            foreach (VehicleMake item in vehicleMakes)
-            {
-                vehicleMakesRepo.Add(mapper.Map<VehicleMakeRepo>(item));
-            }
+            vehicleMakesRepo = mapper.Map<List<VehicleMake>, List<VehicleMakeRepo>>(vehicleMakes);
             return vehicleMakesRepo;
         }
 
@@ -81,10 +78,7 @@ namespace Repository
         {
             VehicleMake vehicleMakes = await vehiclesSet.FindAsync(id);
             List<VehicleModelRepo> vehicleModelsRepo = new List<VehicleModelRepo>();
-            foreach (VehicleModel item in vehicleMakes.VehicleModels)
-            {
-                vehicleModelsRepo.Add(mapper.Map<VehicleModelRepo>(item));
-            }
+            vehicleModelsRepo = mapper.Map<ICollection<VehicleModel>, List<VehicleModelRepo>>(vehicleMakes.VehicleModels);
             return vehicleModelsRepo;
         }
 
@@ -181,10 +175,7 @@ namespace Repository
                     vehicleMakesdb = await vehiclesSet.OrderByDescending(x => x.Name).ToListAsync();
                     break;
             }
-            foreach (VehicleMake item in vehicleMakesdb)
-            {
-                vehicleMakes.Add(mapper.Map<VehicleMakeRepo>(item));
-            }
+            vehicleMakes = mapper.Map<List<VehicleMake>, List<VehicleMakeRepo>>(vehicleMakesdb);
             return vehicleMakes;
         }
 
@@ -195,10 +186,7 @@ namespace Repository
                 int skip = pageSize * pageIndex;
                 List<VehicleMakeRepo> vehicleMakes = new List<VehicleMakeRepo>();
                 List<VehicleMake> makes = await vehiclesSet.OrderBy(x=>x.Id).Skip(skip).Take(pageSize).ToListAsync();
-                foreach (VehicleMake item in makes)
-                {
-                    vehicleMakes.Add(mapper.Map<VehicleMakeRepo>(item));
-                }
+                vehicleMakes = mapper.Map<List<VehicleMake>, List<VehicleMakeRepo>>(makes);
                 return vehicleMakes;
             }
             else
@@ -209,10 +197,7 @@ namespace Repository
         {
             List<VehicleMakeRepo> vehicleMakes = new List<VehicleMakeRepo>();
             List<VehicleMake> vehicleMakesdb = await vehiclesSet.Where(x => x.Name.Contains(filter) || x.Abrv.Contains(filter)).ToListAsync();
-            foreach (VehicleMake item in vehicleMakesdb)
-            {
-                vehicleMakes.Add(mapper.Map<VehicleMakeRepo>(item));
-            }
+            vehicleMakes = mapper.Map<List<VehicleMake>, List<VehicleMakeRepo>>(vehicleMakesdb);
             return vehicleMakes;
         }
     }

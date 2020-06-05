@@ -35,10 +35,7 @@ namespace Server_side_API.Controllers
         {
             IEnumerable<VehicleModelServ> vehicleModels = await VehicleModelService.Get();
             List<VehicleModel> models = new List<VehicleModel>();
-            foreach (VehicleModelServ item in vehicleModels)
-            {
-                models.Add(mapper.Map<VehicleModel>(item));
-            }
+            models = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModels);
             return Ok(models);
         }
 
