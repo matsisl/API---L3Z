@@ -17,13 +17,11 @@ namespace Repository
     {
         private DbSet<VehicleMake> vehiclesSet { get; }
         private IMapper mapper;
-        private VehicleContext VehicleContext;
 
         public VehicleMakeRepository(VehicleContext vehicleContext,IMapper mapper)
         {
             this.vehiclesSet = vehicleContext.VehicleMakes;
             this.mapper = mapper;
-            VehicleContext = vehicleContext;
         }
 
         public async Task<bool> Add(VehicleMakeRepo entity)
@@ -34,6 +32,7 @@ namespace Repository
                 VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
                 if (IsNotExist(vehicleMake))
                 {
+                    vehicleMake.VehicleModels.Clear();
                     VehicleMake make = vehiclesSet.Add(vehicleMake);
                     if (make != null)
                     {
@@ -156,6 +155,16 @@ namespace Repository
                     return false;
             }
             return false;
+        }
+
+        private bool IsModelsExist(List<VehicleModel> vehicleModels)
+        {
+            bool provjera = false;
+            foreach (VehicleModel vehicleModel in vehicleModels)
+            {
+                provjera = vehiclesSet.Any<VehicleMake>(x => x.VehicleModels.Any<VehicleModel>(y => y.Name == vehicleModel.Name || y.Abrv == vehicleModel.Abrv) == false);
+            }            
+            return provjera;
         }
     }
 }

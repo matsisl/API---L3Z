@@ -28,7 +28,7 @@ namespace Server_side_API.Controllers
 
         [Route("api/vehiclemakes")]
         [HttpGet]
-        public async Task<IEnumerable<VehicleMake>> GetAll()
+        public async Task<IHttpActionResult> GetAll()
         {
             IEnumerable<VehicleMakeServ> vehicleMakes = await vehicleMakeService.Get();
             List<VehicleMake> makes = new List<VehicleMake>();
@@ -36,47 +36,59 @@ namespace Server_side_API.Controllers
             {
                 makes.Add(mapper.Map<VehicleMake>(item));
             }
-            return makes;
+            return Ok(makes);
         }
 
         [Route("api/vehiclemakes/id")]
         [HttpGet]
-        public async Task<VehicleMake> GetById(int id)
+        public async Task<IHttpActionResult> GetById(int id)
         {
             VehicleMakeServ vehicleMake = await vehicleMakeService.GetById(id);
-            return mapper.Map<VehicleMake>(vehicleMake);
+            VehicleMake make = mapper.Map<VehicleMake>(vehicleMake);
+            return Ok(make);
         }
 
         [Route("api/vehiclemakes")]
         [HttpDelete]
-        public async Task<bool> Delete(VehicleMake vehicleMake)
+        public async Task<IHttpActionResult> Delete(VehicleMake vehicleMake)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data");
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
             bool provjera = await vehicleMakeService.Delete(vehicleMakeServ);
-            return provjera;
+            if (provjera)
+                return Ok("Vehicle make is successfully deleted!");
+            else
+                return Ok("Vehicle make is not deleted!");
         }
 
         [Route("api/vehiclemakes/")]
         [HttpPost]
-        public async Task<bool> Add(VehicleMake vehicleMake)
+        public async Task<IHttpActionResult> Add(VehicleMake vehicleMake)
         {
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
             bool provjera = await vehicleMakeService.Add(vehicleMakeServ);
-            return provjera;
+            if (provjera)
+                return Ok("Vehicle make is successfuly created!");
+            else
+                return Ok("Vehicle make is not created!");
         }
 
         [Route("api/vehiclemakes")]
         [HttpPut]
-        public async Task<bool> Update(VehicleMake vehicleMake)
+        public async Task<IHttpActionResult> Update(VehicleMake vehicleMake)
         {
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
             bool provjera = await vehicleMakeService.Update(vehicleMakeServ);
-            return provjera;
+            if (provjera)
+                return Ok("Vehicle make is succssesfuly!");
+            else
+                return Ok("Vehicle make is not updated!");
         }
 
         [Route("api/vehiclemakes/models")]
         [HttpGet]
-        public async Task<IEnumerable<VehicleModel>> GetModels(int id)
+        public async Task<IHttpActionResult> GetModels(int id)
         {
             IEnumerable<VehicleModelServ> vehicleModelServs = await vehicleMakeService.GetModels(id);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
@@ -84,7 +96,7 @@ namespace Server_side_API.Controllers
             {
                 vehicleModels.Add(mapper.Map<VehicleModel>(item));
             }
-            return vehicleModels;
+            return Ok(vehicleModels);
         }
     }
 }
