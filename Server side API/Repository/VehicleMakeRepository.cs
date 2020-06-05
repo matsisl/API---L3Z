@@ -51,7 +51,7 @@ namespace Repository
             {
                 VehicleMake vehicleMake = mapper.Map<VehicleMake>(entity);
                 VehicleMake make = await vehiclesSet.FindAsync(vehicleMake.Id);                
-                if (make != null)
+                if (make != null && make.VehicleModels.Count == 0)
                 {
                     vehiclesSet.Remove(make);
                     provjera = true;

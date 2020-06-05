@@ -31,7 +31,7 @@ namespace Repository
             if (entity != null)
             {
                 VehicleModel vehicleModel = mapper.Map<VehicleModel>(entity);
-                if (!IsNotExist(vehicleModel) && IsMakeExist(vehicleModel.MakeId))
+                if (IsNotExist(vehicleModel) && IsMakeExist(vehicleModel.MakeId))
                 {
                     VehicleModel model = vehicleModelSet.Add(vehicleModel);
                     if (model != null)
@@ -100,7 +100,7 @@ namespace Repository
                 var updatedVehicleModel = await vehicleModelSet.FindAsync(vehicleModel.Id);
                 if (updatedVehicleModel != null )
                 {
-                    if (!IsNameNotExist(updatedVehicleModel.Id, vehicleModel.Name))
+                    if (IsNameNotExist(updatedVehicleModel.Id, vehicleModel.Name))
                     {
                         updatedVehicleModel.Name = vehicleModel.Name;
                     }
@@ -108,7 +108,7 @@ namespace Repository
                     {
                         provjera = false;
                     }
-                    if (!IsAbrvNotExist(updatedVehicleModel.Id, vehicleModel.Abrv))
+                    if (IsAbrvNotExist(updatedVehicleModel.Id, vehicleModel.Abrv))
                     {
                         updatedVehicleModel.Abrv = vehicleModel.Abrv;
                     }
@@ -143,15 +143,15 @@ namespace Repository
                 List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Name.ToLower().Equals(name) || x.Abrv.ToLower().Equals(abrv)).ToList();
                 if (vehicleModels.Count == 0)
                 {
-                    return false;
+                    return true;
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
             else
-                return true;
+                return false;
         }
         private bool IsNameNotExist(int id, string newName)
         {
@@ -160,11 +160,11 @@ namespace Repository
                 newName = newName.ToLower();
                 List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Name.ToLower().Equals(newName) && x.Id!=id ).ToList();
                 if (vehicleModels.Count == 0)
-                    return false;
-                else
                     return true;
+                else
+                    return false;
             }
-            return true;
+            return false;
         }
 
         private bool IsAbrvNotExist(int id, string abrv)
@@ -174,11 +174,11 @@ namespace Repository
                 abrv = abrv.ToLower();
                 List<VehicleModel> vehicleModels = vehicleModelSet.Where(x => x.Abrv.ToLower().Equals(abrv) && x.Id!=id).ToList();
                 if (vehicleModels.Count == 0)
-                    return false;
-                else
                     return true;
+                else
+                    return false;
             }
-            return true;
+            return false;
         }
         private bool IsMakeExist(int id)
         {
