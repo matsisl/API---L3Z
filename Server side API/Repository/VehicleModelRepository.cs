@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common;
 using DAL;
 using Model;
 using Repository.Common;
@@ -187,6 +188,54 @@ namespace Repository
                 return false;
             else
                 return true;
+        }
+
+        public async Task<IEnumerable<VehicleModelRepo>> Sort(TypeOfSorting typeOfSorting)
+        {
+            List<VehicleModelRepo> vehicleModels = new List<VehicleModelRepo>();
+            List<VehicleModel> vehicleModeldb = new List<VehicleModel>();
+            switch (typeOfSorting)
+            {
+                case (TypeOfSorting.Asc):
+                    vehicleModeldb = await vehicleModelSet.OrderBy(x => x.Name).ToListAsync();
+                    break;
+                case (TypeOfSorting.Desc):
+                    vehicleModeldb = await vehicleModelSet.OrderByDescending(x => x.Name).ToListAsync();
+                    break;
+            }
+            foreach (VehicleModel item in vehicleModeldb)
+            {
+                vehicleModels.Add(mapper.Map<VehicleModelRepo>(item));
+            }
+            return vehicleModels;
+        }
+
+        public async Task<IEnumerable<VehicleModelRepo>> Paging(int pageSize, int pageIndex)
+        {
+            if (pageIndex >= 0 && pageSize > 0)
+            {
+                int skip = pageSize * pageIndex;
+                List<VehicleModelRepo> vehicleModels = new List<VehicleModelRepo>();
+                List<VehicleModel> makes = await vehicleModelSet.OrderBy(x=>x.Id).Skip(skip).Take(pageSize).ToListAsync();
+                foreach (VehicleModel item in makes)
+                {
+                    vehicleModels.Add(mapper.Map<VehicleModelRepo>(item));
+                }
+                return vehicleModels;
+            }
+            else
+                return new List<VehicleModelRepo>();
+        }
+
+        public async Task<IEnumerable<VehicleModelRepo>> Filter(string filter)
+        {
+            List<VehicleModelRepo> vehicleModels = new List<VehicleModelRepo>();
+            List<VehicleModel> vehicleMakesdb = await vehicleModelSet.Where(x => x.Name.Contains(filter) || x.Abrv.Contains(filter)).ToListAsync();
+            foreach (VehicleModel item in vehicleMakesdb)
+            {
+                vehicleModels.Add(mapper.Map<VehicleModelRepo>(item));
+            }
+            return vehicleModels;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common;
 using Repository;
 using Repository.Common;
 using Service.Common;
@@ -82,6 +83,39 @@ namespace Service
         {
             VehicleMakeRepo vehicleMakeRepo = await unitOfWork.VehicleModelRepository.GetVehicleMake(id);
             return mapper.Map<VehicleMakeServ>(vehicleMakeRepo);
+        }
+
+        public async Task<IEnumerable<VehicleModelServ>> Sort(TypeOfSorting typeOfSorting)
+        {
+            List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
+            IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Sort(typeOfSorting);
+            foreach (VehicleModelRepo item in vehicleModelRepos)
+            {
+                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
+            }
+            return vehicleModelServs;
+        }
+
+        public async Task<IEnumerable<VehicleModelServ>> Filter(string filter)
+        {
+            List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
+            IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Filter(filter);
+            foreach (VehicleModelRepo item in vehicleModelRepos)
+            {
+                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
+            }
+            return vehicleModelServs;
+        }
+
+        public async Task<IEnumerable<VehicleModelServ>> Paging(int pageSize, int pageIndex)
+        {
+            List<VehicleModelServ> vehicleModelServs = new List<VehicleModelServ>();
+            IEnumerable<VehicleModelRepo> vehicleModelRepos = await unitOfWork.VehicleModelRepository.Paging(pageSize,pageIndex);
+            foreach (VehicleModelRepo item in vehicleModelRepos)
+            {
+                vehicleModelServs.Add(mapper.Map<VehicleModelServ>(item));
+            }
+            return vehicleModelServs;
         }
     }
 }

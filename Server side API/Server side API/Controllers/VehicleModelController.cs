@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
+using Common;
 using Server_side_API.Models;
 using Server_side_API.Utils;
 using Service;
@@ -93,6 +94,39 @@ namespace Server_side_API.Controllers
             VehicleMakeServ vehicleMake = await VehicleModelService.GetMake(id);
             VehicleMake make = mapper.Map<VehicleMake>(vehicleMake);
             return Ok(make);
+        }
+
+        [Route(baseRoute+"/sort/{sort}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Sort(int sort)
+        {
+            TypeOfSorting typeOfSorting = TypeOfSorting.Asc;
+            if (sort <= 0)
+                typeOfSorting = TypeOfSorting.Desc;
+            IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Sort(typeOfSorting);
+            List<VehicleModel> vehicleModels = new List<VehicleModel>();
+            vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
+            return Ok(vehicleModels);
+        }
+
+        [Route(baseRoute+"/filter/{filter}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Filter(string filter)
+        {
+            IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Filter(filter);
+            List<VehicleModel> vehicleModels = new List<VehicleModel>();
+            vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
+            return Ok(vehicleModels);
+        }
+
+        [Route(baseRoute+"/paging/{pageSize}/{pageIndex}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Paging(int pageSize, int pageIndex)
+        {
+            IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Paging(pageSize, pageIndex);
+            List<VehicleModel> vehicleModels = new List<VehicleModel>();
+            vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
+            return Ok(vehicleModels);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
+using Common;
 using Repository.Common;
 using Server_side_API.Models;
 using Server_side_API.Utils;
@@ -17,12 +18,12 @@ namespace Server_side_API.Controllers
 {
     public class VehicleMakeController : ApiController
     {
-        private VehicleMakeService vehicleMakeService;
+        private VehicleMakeService VehicleMakeService;
         private IMapper mapper;
 
         public VehicleMakeController()
         {
-            vehicleMakeService = AutofacConfig.Container.Resolve<VehicleMakeService>();
+            VehicleMakeService = AutofacConfig.Container.Resolve<VehicleMakeService>();
             mapper = AutofacConfig.Container.Resolve<IMapper>();
         }
 
@@ -30,7 +31,7 @@ namespace Server_side_API.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
-            IEnumerable<VehicleMakeServ> vehicleMakes = await vehicleMakeService.Get();
+            IEnumerable<VehicleMakeServ> vehicleMakes = await VehicleMakeService.Get();
             List<VehicleMake> makes = new List<VehicleMake>();
             foreach (VehicleMakeServ item in vehicleMakes)
             {
@@ -43,7 +44,7 @@ namespace Server_side_API.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetById(int id)
         {
-            VehicleMakeServ vehicleMake = await vehicleMakeService.GetById(id);
+            VehicleMakeServ vehicleMake = await VehicleMakeService.GetById(id);
             VehicleMake make = mapper.Map<VehicleMake>(vehicleMake);
             return Ok(make);
         }
@@ -55,7 +56,7 @@ namespace Server_side_API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
-            bool provjera = await vehicleMakeService.Delete(vehicleMakeServ);
+            bool provjera = await VehicleMakeService.Delete(vehicleMakeServ);
             if (provjera)
                 return Ok("Vehicle make is successfully deleted!");
             else
@@ -67,7 +68,7 @@ namespace Server_side_API.Controllers
         public async Task<IHttpActionResult> Add(VehicleMake vehicleMake)
         {
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
-            bool provjera = await vehicleMakeService.Add(vehicleMakeServ);
+            bool provjera = await VehicleMakeService.Add(vehicleMakeServ);
             if (provjera)
                 return Ok("Vehicle make is successfuly created!");
             else
@@ -79,7 +80,7 @@ namespace Server_side_API.Controllers
         public async Task<IHttpActionResult> Update(VehicleMake vehicleMake)
         {
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
-            bool provjera = await vehicleMakeService.Update(vehicleMakeServ);
+            bool provjera = await VehicleMakeService.Update(vehicleMakeServ);
             if (provjera)
                 return Ok("Vehicle make is succssesfuly!");
             else
@@ -90,13 +91,46 @@ namespace Server_side_API.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetModels(int id)
         {
-            IEnumerable<VehicleModelServ> vehicleModelServs = await vehicleMakeService.GetModels(id);
+            IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleMakeService.GetModels(id);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
             foreach (VehicleModelServ item in vehicleModelServs)
             {
                 vehicleModels.Add(mapper.Map<VehicleModel>(item));
             }
             return Ok(vehicleModels);
+        }
+
+        [Route("api/vehiclemakes/sort/{sort}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Sort(int sort)
+        {
+            TypeOfSorting typeOfSorting = TypeOfSorting.Asc;
+            if (sort <= 0)
+                typeOfSorting = TypeOfSorting.Desc;
+            IEnumerable<VehicleMakeServ> vehicleMakeServs = await VehicleMakeService.Sort(typeOfSorting);
+            List<VehicleMake> vehicleMakes = new List<VehicleMake>();
+            vehicleMakes = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakeServs);
+            return Ok(vehicleMakes);
+        }
+
+        [Route("api/vehiclemakes/filter/{filter}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Filter(string filter)
+        {
+            IEnumerable<VehicleMakeServ> vehicleMakeServs = await VehicleMakeService.Filter(filter);
+            List<VehicleMake> vehicleMakes = new List<VehicleMake>();
+            vehicleMakes = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakeServs);
+            return Ok(vehicleMakes);
+        }
+
+        [Route("api/vehiclemakes/paging/{pageSize}/{pageIndex}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Paging(int pageSize, int pageIndex)
+        {
+            IEnumerable<VehicleMakeServ> vehicleMakeServs = await VehicleMakeService.Paging(pageSize, pageIndex);
+            List<VehicleMake> vehicleMakes = new List<VehicleMake>();
+            vehicleMakes = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakeServs);
+            return Ok(vehicleMakes);
         }
     }
 }

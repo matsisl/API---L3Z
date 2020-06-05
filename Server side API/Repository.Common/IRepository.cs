@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,8 @@ namespace Repository.Common
         Task<bool> Add(TEntity entity);
         Task<bool> Delete(TEntity entity);
         Task<bool> Update(TEntity entity);
+        Task<IEnumerable<TEntity>> Sort(TypeOfSorting typeOfSorting);
+        Task<IEnumerable<TEntity>> Paging(int pageSize, int pageIndex);
+        Task<IEnumerable<TEntity>> Filter(string filter);
     }
 }
