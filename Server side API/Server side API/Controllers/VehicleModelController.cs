@@ -52,7 +52,7 @@ namespace Server_side_API.Controllers
             }
         }
 
-        [Route(baseRoute+"/id")]
+        [Route(baseRoute)]
         [HttpGet]
         public async Task<HttpResponseMessage> GetById(int id)
         {

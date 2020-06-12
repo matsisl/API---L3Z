@@ -53,7 +53,7 @@ namespace Server_side_API.Controllers
             }
         }
 
-        [Route(baseRoute+"/id")]
+        [Route(baseRoute)]
         [HttpGet]
         public async Task<HttpResponseMessage> GetById(int id)
         {
@@ -113,7 +113,7 @@ namespace Server_side_API.Controllers
             VehicleMakeServ vehicleMakeServ = mapper.Map<VehicleMakeServ>(vehicleMake);
             bool provjera = await VehicleMakeService.Update(vehicleMakeServ);
             if (provjera)
-                return Request.CreateResponse(HttpStatusCode.OK, "Vehicle make is succssesfuly!");
+                return Request.CreateResponse(HttpStatusCode.OK, "Vehicle make is succssesfuly updated!");
             else
                 return Request.CreateResponse(HttpStatusCode.Conflict, "Vehicle make is not updated!");
         }
