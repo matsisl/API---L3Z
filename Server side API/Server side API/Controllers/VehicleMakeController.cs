@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Server_side_API.Controllers
 {
@@ -27,14 +28,21 @@ namespace Server_side_API.Controllers
             mapper = AutofacConfig.Container.Resolve<IMapper>();
         }
 
-        [Route("api/vehiclemakes")]
+        [Route("api/vehiclemakes/{pageIndex?}/{pageSize?}/{sort?}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAll()
+        public async Task<HttpResponseMessage> Get(int pageIndex=1, int pageSize=10, string filter="", TypeOfSorting sort = TypeOfSorting.Asc)
         {
-            IEnumerable<VehicleMakeServ> vehicleMakes = await VehicleMakeService.Get();
-            List<VehicleMake> makes = new List<VehicleMake>();
-            makes = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakes);
-            return Ok(makes);
+            PageResult<VehicleMake> result = new PageResult<VehicleMake>(pageIndex, pageSize, sort, filter);
+            if (result.Paging.Invalidete())
+            {
+                IEnumerable<VehicleMakeServ> vehicleMakes = await VehicleMakeService.Get(result.Filtering, result.Paging, result.Sorting);
+                result.Results = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakes);
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
 
         [Route("api/vehiclemakes/id")]

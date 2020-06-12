@@ -200,5 +200,25 @@ namespace Repository
             vehicleMakes = mapper.Map<List<VehicleMake>, List<VehicleMakeRepo>>(vehicleMakesdb);
             return vehicleMakes;
         }
+
+        public async Task<IEnumerable<VehicleMakeRepo>> Get(Sorting sorting, Paging paging, Filtering filtering)
+        {
+            IQueryable<VehicleMake> vehicleMakes;
+            if (sorting.TypeOfSorting == TypeOfSorting.Asc)
+            {
+                vehicleMakes = vehiclesSet.OrderBy(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+            }
+            else
+            {
+                vehicleMakes = vehiclesSet.OrderByDescending(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+            }
+            if (!String.IsNullOrWhiteSpace(filtering.Filter))
+            {
+                vehicleMakes = vehicleMakes.Where(x => x.Name.Contains(filtering.Filter) || x.Abrv.Contains(filtering.Filter));
+            }
+            List<VehicleMakeRepo> vehicleMakeRepos = new List<VehicleMakeRepo>();
+            vehicleMakeRepos = mapper.Map<IEnumerable<VehicleMake>, List<VehicleMakeRepo>>(await vehicleMakes.ToListAsync());
+            return vehicleMakeRepos;
+        }
     }
 }

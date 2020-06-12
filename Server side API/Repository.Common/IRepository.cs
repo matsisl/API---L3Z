@@ -17,5 +17,6 @@ namespace Repository.Common
         Task<IEnumerable<TEntity>> Sort(TypeOfSorting typeOfSorting);
         Task<IEnumerable<TEntity>> Paging(int pageSize, int pageIndex);
         Task<IEnumerable<TEntity>> Filter(string filter);
+        Task<IEnumerable<TEntity>> Get(Sorting sorting, Paging paging, Filtering filtering);
     }
 }

@@ -225,5 +225,10 @@ namespace Repository
             vehicleModels = mapper.Map<List<VehicleModel>, List<VehicleModelRepo>>(vehicleMakesdb);
             return vehicleModels;
         }
+
+        public Task<IEnumerable<VehicleModelRepo>> Get(Sorting sorting, Paging paging, Filtering filtering)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

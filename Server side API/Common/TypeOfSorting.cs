@@ -8,7 +8,7 @@ namespace Common
 {
     public enum TypeOfSorting
     {
-        Asc = 1,
-        Desc = 2
+        Asc = 0,
+        Desc = 1
     }
 }

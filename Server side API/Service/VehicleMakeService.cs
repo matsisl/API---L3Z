@@ -50,6 +50,13 @@ namespace Service
             return provjera;
         }
 
+        public async Task<IEnumerable<VehicleMakeServ>> Get(Filtering filtering, Paging paging, Sorting sorting)
+        {
+            IEnumerable<VehicleMakeRepo> vehicleMakeRepos = await unitOfWork.VehicleMakeRepository.Get(sorting, paging, filtering);
+            List<VehicleMakeServ> vehicleMakeServs = mapper.Map<IEnumerable<VehicleMakeRepo>, List<VehicleMakeServ>>(vehicleMakeRepos);
+            return vehicleMakeServs;
+        }
+
         public async Task<IEnumerable<VehicleMakeServ>> Get()
         {
             IEnumerable<VehicleMakeRepo> vehicleMakesRepo = await unitOfWork.VehicleMakeRepository.GetAll();
