@@ -22,7 +22,6 @@ namespace Server_side_API.Controllers
         private IMapper mapper;
         private const string baseRoute = "api/vehiclemodels";
 
-
         public VehicleModelController()
         {
             VehicleModelService = AutofacConfig.Container.Resolve<VehicleModelService>();
@@ -33,6 +32,11 @@ namespace Server_side_API.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> Get(int pageIndex = 1, int pageSize = 10, string filter = "", TypeOfSorting sort = TypeOfSorting.Asc)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             PageResult<VehicleModel> result = new PageResult<VehicleModel>(pageIndex, pageSize, sort, filter);
             if (result.Paging.Invalidete())
             {
@@ -50,89 +54,129 @@ namespace Server_side_API.Controllers
 
         [Route(baseRoute+"/id")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetById(int id)
+        public async Task<HttpResponseMessage> GetById(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             VehicleModelServ vehicleModel = await VehicleModelService.GetById(id);
             VehicleModel model = mapper.Map<VehicleModel>(vehicleModel);
-            return Ok(model);
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
         [Route(baseRoute)]
         [HttpDelete]
-        public async Task<IHttpActionResult> Delete(VehicleModel vehicleModel)
+        public async Task<HttpResponseMessage> Delete(VehicleModel vehicleModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             VehicleModelServ vehicleModelServ = mapper.Map<VehicleModelServ>(vehicleModel);
             bool provjera = await VehicleModelService.Delete(vehicleModelServ);
             if (provjera)
-                return Ok("Vehicle model is successfully deleted!");
+                return Request.CreateResponse(HttpStatusCode.OK, "Vehicle model is successfully deleted!");
             else
-                return Ok("Vehicle model is not deleted!");
+                return Request.CreateResponse(HttpStatusCode.Conflict, "Vehicle model is not deleted!");
         }
 
         [Route(baseRoute)]
         [HttpPost]
-        public async Task<IHttpActionResult> Add(VehicleModel vehicleModel)
+        public async Task<HttpResponseMessage> Add(VehicleModel vehicleModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             VehicleModelServ vehicleModelServ = mapper.Map<VehicleModelServ>(vehicleModel);
             bool provjera = await VehicleModelService.Add(vehicleModelServ);
             if (provjera)
-                return Ok("Vehicle model is successfully created!");
+                return Request.CreateResponse(HttpStatusCode.OK, "Vehicle model is successfully created!");
             else
-                return Ok("Vehicle model is not created!");
+                return Request.CreateResponse(HttpStatusCode.Conflict, "Vehicle model is not created!");
         }
 
         [Route(baseRoute)]
         [HttpPut]
-        public async Task<IHttpActionResult> Update(VehicleModel vehicleModel)
+        public async Task<HttpResponseMessage> Update(VehicleModel vehicleModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             VehicleModelServ vehicleModelServ = mapper.Map<VehicleModelServ>(vehicleModel);
             bool provjera = await VehicleModelService.Update(vehicleModelServ);
             if (provjera)
-                return Ok("Vehicle model is successfully updated!");
+                return Request.CreateResponse(HttpStatusCode.OK, "Vehicle model is successfully updated!");
             else
-                return Ok("Vehicle model is not updated!");
+                return Request.CreateResponse(HttpStatusCode.Conflict, "Vehicle model is not updated!");
         }
 
         [Route(baseRoute+"/make")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetVehicleMake(int id)
+        public async Task<HttpResponseMessage> GetVehicleMake(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             VehicleMakeServ vehicleMake = await VehicleModelService.GetMake(id);
             VehicleMake make = mapper.Map<VehicleMake>(vehicleMake);
-            return Ok(make);
+            return Request.CreateResponse(HttpStatusCode.OK, make);
         }
 
         [Route(baseRoute+"/sort/{sort}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Sort(int sort)
+        public async Task<HttpResponseMessage> Sort(int sort)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             TypeOfSorting typeOfSorting = TypeOfSorting.Asc;
             if (sort <= 0)
                 typeOfSorting = TypeOfSorting.Desc;
             IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Sort(typeOfSorting);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
             vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
-            return Ok(vehicleModels);
+            return Request.CreateResponse(HttpStatusCode.OK, vehicleModels);
         }
 
         [Route(baseRoute+"/filter/{filter}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Filter(string filter)
+        public async Task<HttpResponseMessage> Filter(string filter)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Filter(filter);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
             vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
-            return Ok(vehicleModels);
+            return Request.CreateResponse(HttpStatusCode.OK, vehicleModels);
         }
 
         [Route(baseRoute+"/paging/{pageSize}/{pageIndex}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Paging(int pageSize, int pageIndex)
+        public async Task<HttpResponseMessage> Paging(int pageSize, int pageIndex)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid data");
+            }
+
             IEnumerable<VehicleModelServ> vehicleModelServs = await VehicleModelService.Paging(pageSize, pageIndex);
             List<VehicleModel> vehicleModels = new List<VehicleModel>();
             vehicleModels = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModelServs);
-            return Ok(vehicleModels);
+            return Request.CreateResponse(HttpStatusCode.OK, vehicleModels);
         }
     }
 }
