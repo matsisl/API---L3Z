@@ -21,7 +21,7 @@ namespace Server_side_API.Controllers
     {
         private VehicleMakeService VehicleMakeService;
         private IMapper mapper;
-        private const string baseRoute="api/vehiclemodels";
+        private const string baseRoute="api/vehiclemakes";
 
         public VehicleMakeController()
         {
