@@ -21,6 +21,7 @@ namespace Server_side_API.Controllers
     {
         private VehicleMakeService VehicleMakeService;
         private IMapper mapper;
+        private const string baseRoute="api/vehiclemodels";
 
         public VehicleMakeController()
         {
@@ -28,7 +29,7 @@ namespace Server_side_API.Controllers
             mapper = AutofacConfig.Container.Resolve<IMapper>();
         }
 
-        [Route("api/vehiclemakes/{pageIndex?}/{pageSize?}/{sort?}")]
+        [Route(baseRoute+"/{pageIndex?}/{pageSize?}/{sort?}")]
         [HttpGet]
         public async Task<HttpResponseMessage> Get(int pageIndex=1, int pageSize=10, string filter="", TypeOfSorting sort = TypeOfSorting.Asc)
         {
@@ -45,7 +46,7 @@ namespace Server_side_API.Controllers
             }
         }
 
-        [Route("api/vehiclemakes/id")]
+        [Route(baseRoute+"/id")]
         [HttpGet]
         public async Task<IHttpActionResult> GetById(int id)
         {
@@ -54,7 +55,7 @@ namespace Server_side_API.Controllers
             return Ok(make);
         }
 
-        [Route("api/vehiclemakes")]
+        [Route(baseRoute)]
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(VehicleMake vehicleMake)
         {
@@ -68,7 +69,7 @@ namespace Server_side_API.Controllers
                 return Ok("Vehicle make is not deleted!");
         }
 
-        [Route("api/vehiclemakes/")]
+        [Route(baseRoute)]
         [HttpPost]
         public async Task<IHttpActionResult> Add(VehicleMake vehicleMake)
         {
@@ -80,7 +81,7 @@ namespace Server_side_API.Controllers
                 return Ok("Vehicle make is not created!");
         }
 
-        [Route("api/vehiclemakes")]
+        [Route(baseRoute)]
         [HttpPut]
         public async Task<IHttpActionResult> Update(VehicleMake vehicleMake)
         {
@@ -92,7 +93,7 @@ namespace Server_side_API.Controllers
                 return Ok("Vehicle make is not updated!");
         }
 
-        [Route("api/vehiclemakes/models")]
+        [Route(baseRoute+"/models")]
         [HttpGet]
         public async Task<IHttpActionResult> GetModels(int id)
         {
@@ -102,7 +103,7 @@ namespace Server_side_API.Controllers
             return Ok(vehicleModels);
         }
 
-        [Route("api/vehiclemakes/sort/{sort}")]
+        [Route(baseRoute+"/sort/{sort}")]
         [HttpGet]
         public async Task<IHttpActionResult> Sort(int sort)
         {
@@ -115,7 +116,7 @@ namespace Server_side_API.Controllers
             return Ok(vehicleMakes);
         }
 
-        [Route("api/vehiclemakes/filter/{filter}")]
+        [Route(baseRoute+"/filter/{filter}")]
         [HttpGet]
         public async Task<IHttpActionResult> Filter(string filter)
         {
@@ -125,7 +126,7 @@ namespace Server_side_API.Controllers
             return Ok(vehicleMakes);
         }
 
-        [Route("api/vehiclemakes/paging/{pageSize}/{pageIndex}")]
+        [Route(baseRoute+"/paging/{pageSize}/{pageIndex}")]
         [HttpGet]
         public async Task<IHttpActionResult> Paging(int pageSize, int pageIndex)
         {
