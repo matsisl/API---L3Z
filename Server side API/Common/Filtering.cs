@@ -14,17 +14,10 @@ namespace Common
             get => _filter;
             set => _filter = value;
         }
-        private string _columnOfFiltering;
-        private string ColumnOfFiltering
-        {
-            get => _columnOfFiltering;
-            set => _columnOfFiltering = value;
-        }
 
-        public Filtering(string filter, string columnOfFiltering="Name")
+        public Filtering(string filter)
         {
             Filter = filter;
-            ColumnOfFiltering = columnOfFiltering;
         }
     }
 }
