@@ -29,14 +29,21 @@ namespace Server_side_API.Controllers
             mapper = AutofacConfig.Container.Resolve<IMapper>();
         }
 
-        [Route(baseRoute)]
+        [Route(baseRoute+"/{pageIndex?}/{pageSize?}/{sort?}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAll()
+        public async Task<HttpResponseMessage> Get(int pageIndex = 1, int pageSize = 10, string filter = "", TypeOfSorting sort = TypeOfSorting.Asc)
         {
-            IEnumerable<VehicleModelServ> vehicleModels = await VehicleModelService.Get();
-            List<VehicleModel> models = new List<VehicleModel>();
-            models = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModels);
-            return Ok(models);
+            PageResult<VehicleModel> result = new PageResult<VehicleModel>(pageIndex, pageSize, sort, filter);
+            if (result.Paging.Invalidete())
+            {
+                IEnumerable<VehicleModelServ> vehicleModels = await VehicleModelService.Get(result.Filtering, result.Paging, result.Sorting);
+                result.Results = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModels);
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
 
         [Route(baseRoute+"/id")]

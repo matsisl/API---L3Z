@@ -226,9 +226,24 @@ namespace Repository
             return vehicleModels;
         }
 
-        public Task<IEnumerable<VehicleModelRepo>> Get(Sorting sorting, Paging paging, Filtering filtering)
+        public async Task<IEnumerable<VehicleModelRepo>> Get(Sorting sorting, Paging paging, Filtering filtering)
         {
-            throw new NotImplementedException();
+            IQueryable<VehicleModel> vehicleModels;
+            if (sorting.TypeOfSorting == TypeOfSorting.Asc)
+            {
+                vehicleModels = vehicleModelSet.OrderBy(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+            }
+            else
+            {
+                vehicleModels = vehicleModelSet.OrderByDescending(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+            }
+            if (!String.IsNullOrWhiteSpace(filtering.Filter))
+            {
+                vehicleModels = vehicleModels.Where(x => x.Name.Contains(filtering.Filter) || x.Abrv.Contains(filtering.Filter));
+            }
+            List<VehicleModelRepo> vehicleModelRepos = new List<VehicleModelRepo>();
+            vehicleModelRepos = mapper.Map<IEnumerable<VehicleModel>, List<VehicleModelRepo>>(await vehicleModels.ToListAsync());
+            return vehicleModelRepos;
         }
     }
 }
