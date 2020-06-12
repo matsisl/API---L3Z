@@ -229,13 +229,17 @@ namespace Repository
         public async Task<IEnumerable<VehicleModelRepo>> Get(Sorting sorting, Paging paging, Filtering filtering)
         {
             IQueryable<VehicleModel> vehicleModels;
-            if (sorting.TypeOfSorting == TypeOfSorting.Asc)
+            switch (sorting.TypeOfSorting)
             {
-                vehicleModels = vehicleModelSet.OrderBy(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
-            }
-            else
-            {
-                vehicleModels = vehicleModelSet.OrderByDescending(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+                case TypeOfSorting.Asc:
+                    vehicleModels = vehicleModelSet.OrderBy(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+                    break;
+                case TypeOfSorting.Desc:
+                    vehicleModels = vehicleModelSet.OrderByDescending(x => x.Name).Skip(paging.Offset()).Take(paging.PageSize);
+                    break;
+                default:
+                    vehicleModels = vehicleModelSet.OrderBy(x => x.Id).Skip(paging.Offset()).Take(paging.PageSize);
+                    break;
             }
             if (!String.IsNullOrWhiteSpace(filtering.Filter))
             {

@@ -9,6 +9,7 @@ namespace Common
     public enum TypeOfSorting
     {
         Asc = 0,
-        Desc = 1
+        Desc = 1,
+        Unknown = 2
     }
 }
