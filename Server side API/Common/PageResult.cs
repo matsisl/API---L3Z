@@ -30,7 +30,15 @@ namespace Common
 
         public void GenerateNextPage(string route)
         {
-            
+            int nextPageIndex = Paging.PageIndex + 1;
+            NextPage = route +
+                "/" + nextPageIndex +
+                "/" + Paging.PageSize +
+                "/" + Sorting.TypeOfSorting;
+            if (!String.IsNullOrEmpty(Filtering.Filter))
+            {
+                NextPage = NextPage + "?filter=" + Filtering.Filter;
+            }
         }
     }
 }

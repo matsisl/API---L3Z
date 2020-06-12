@@ -34,8 +34,11 @@ namespace Server_side_API.Controllers
         public async Task<HttpResponseMessage> Get(int pageIndex=1, int pageSize=10, string filter="", TypeOfSorting sort = TypeOfSorting.Asc)
         {
             PageResult<VehicleMake> result = new PageResult<VehicleMake>(pageIndex, pageSize, sort, filter);
+            
             if (result.Paging.Invalidete())
             {
+                var url = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/" + baseRoute;
+                result.GenerateNextPage(url);
                 IEnumerable<VehicleMakeServ> vehicleMakes = await VehicleMakeService.Get(result.Filtering, result.Paging, result.Sorting);
                 result.Results = mapper.Map<IEnumerable<VehicleMakeServ>, List<VehicleMake>>(vehicleMakes);
                 return Request.CreateResponse(HttpStatusCode.OK, result);

@@ -36,6 +36,8 @@ namespace Server_side_API.Controllers
             PageResult<VehicleModel> result = new PageResult<VehicleModel>(pageIndex, pageSize, sort, filter);
             if (result.Paging.Invalidete())
             {
+                var url = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/" + baseRoute;
+                result.GenerateNextPage(url);
                 IEnumerable<VehicleModelServ> vehicleModels = await VehicleModelService.Get(result.Filtering, result.Paging, result.Sorting);
                 result.Results = mapper.Map<IEnumerable<VehicleModelServ>, List<VehicleModel>>(vehicleModels);
                 return Request.CreateResponse(HttpStatusCode.OK, result);
